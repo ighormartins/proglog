@@ -1,10 +1,10 @@
-# ProgressLogger
+# proglog
 
 > A tiny Node.js library to track multiple long-running tasks and auto-render a live, aggregated progress table in the console.
 
-[![npm version](https://img.shields.io/npm/v/progress-logger.svg)](https://www.npmjs.com/package/progress-logger)
+[![npm version](https://img.shields.io/npm/v/proglog.svg)](https://www.npmjs.com/package/proglog)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js Version](https://img.shields.io/node/v/progress-logger.svg)](https://nodejs.org)
+[![Node.js Version](https://img.shields.io/node/v/proglog.svg)](https://nodejs.org)
 
 Built for CLI scripts, Node workers, cron jobs, and API servers. **Zero dependencies, fully typed, lightweight.**
 
@@ -13,7 +13,7 @@ Built for CLI scripts, Node workers, cron jobs, and API servers. **Zero dependen
 **Super simple.** Just call `ProgressLogger('task-name')` (or `PLG('task-name')`) anywhere in your code. No setup, no initialization, no cleanup needed.
 
 ```javascript
-import { PLG } from 'progress-logger';
+import { PLG } from 'proglog';
 
 // That's it! Just call and chain
 PLG('download').setTotal(100);
@@ -48,16 +48,16 @@ download             100/100          100%  [███████████�
 ## Installation
 
 ```bash
-npm install progress-logger
+npm install proglog
 ```
 
 ## Quick Start
 
 **ESM (recommended):**
 ```javascript
-import ProgressLogger from 'progress-logger';
+import ProgressLogger from 'proglog';
 // Or use the short alias:
-import { PLG } from 'progress-logger';
+import { PLG } from 'proglog';
 
 // No need to store in a variable - just call it!
 ProgressLogger('processing').setTotal(1000);
@@ -70,9 +70,9 @@ for (let i = 0; i < 1000; i++) {
 
 **CommonJS:**
 ```javascript
-const ProgressLogger = require('progress-logger').default;
+const ProgressLogger = require('proglog').default;
 // Or use the short alias:
-const { PLG } = require('progress-logger');
+const { PLG } = require('proglog');
 
 ProgressLogger('processing').setTotal(1000);
 // ... rest is the same
@@ -110,9 +110,9 @@ downloading-files    50/100           50%  [██████████░░
 ### Basic Usage
 
 ```javascript
-import ProgressLogger from 'progress-logger';
+import ProgressLogger from 'proglog';
 // Or use the short alias for less typing:
-import { PLG } from 'progress-logger';
+import { PLG } from 'proglog';
 
 // Just call it directly - no variables needed!
 PLG('my-task').setTotal(100);
@@ -128,7 +128,7 @@ for (let i = 0; i < 100; i++) {
 Track multiple tasks simultaneously - each one automatically appears in the live table:
 
 ```javascript
-import { PLG } from 'progress-logger';
+import { PLG } from 'proglog';
 
 // Set up multiple tasks
 PLG('fetching-data').setTotal(50);
@@ -148,7 +148,7 @@ PLG('uploading-results').increment();
 Handle rate limits or resource constraints:
 
 ```javascript
-import ProgressLogger from 'progress-logger';
+import ProgressLogger from 'proglog';
 
 ProgressLogger('api-calls').setTotal(1000);
 
@@ -171,7 +171,7 @@ for (let i = 0; i < 1000; i++) {
 Real-world batch processing workflow:
 
 ```javascript
-import ProgressLogger from 'progress-logger';
+import ProgressLogger from 'proglog';
 
 async function processBatch(records) {
   // Phase 1: Fetch
@@ -202,7 +202,7 @@ async function processBatch(records) {
 All methods return the tracker, so you can chain everything:
 
 ```javascript
-import ProgressLogger from 'progress-logger';
+import ProgressLogger from 'proglog';
 
 // Chain everything in one go
 ProgressLogger('my-task')
@@ -228,7 +228,7 @@ Creates or retrieves a progress tracker.
 - **Returns** - Progress instance
 
 ```javascript
-import ProgressLogger from 'progress-logger';
+import ProgressLogger from 'proglog';
 
 ProgressLogger('my-task').setTotal(100);
 ```
@@ -385,7 +385,7 @@ Useful for:
 Full TypeScript support with type inference:
 
 ```typescript
-import ProgressLogger from 'progress-logger';
+import ProgressLogger from 'proglog';
 
 ProgressLogger('my-task').setTotal(100);
 ```
@@ -396,14 +396,14 @@ Works with both module systems:
 
 ```javascript
 // ESM (recommended)
-import ProgressLogger from 'progress-logger';
+import ProgressLogger from 'proglog';
 // Or short alias:
-import { PLG } from 'progress-logger';
+import { PLG } from 'proglog';
 
 // CommonJS
-const ProgressLogger = require('progress-logger').default;
+const ProgressLogger = require('proglog').default;
 // Or short alias:
-const { PLG } = require('progress-logger');
+const { PLG } = require('proglog');
 ```
 
 
@@ -474,8 +474,8 @@ Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for 
 ### Development Setup
 
 ```bash
-git clone https://github.com/ighormartins/progress-logger.git
-cd progress-logger
+git clone https://github.com/ighormartins/proglog.git
+cd proglog
 npm install
 npm run build
 npm test

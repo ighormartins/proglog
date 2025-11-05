@@ -51,8 +51,8 @@ Enhancement suggestions are tracked as GitHub issues. When creating an enhanceme
 
 1. Fork and clone the repository:
    ```bash
-   git clone https://github.com/ighormartins/progress-logger.git
-   cd progress-logger
+   git clone https://github.com/ighormartins/proglog.git
+   cd proglog
    ```
 
 2. Install dependencies:

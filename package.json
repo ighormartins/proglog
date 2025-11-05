@@ -1,5 +1,5 @@
 {
-  "name": "progress-logger",
+  "name": "proglog",
   "version": "0.1.0",
   "description": "A tiny Node.js library to track multiple long-running tasks and auto-render a live, aggregated progress table in the console",
   "main": "dist/cjs/index.js",
@@ -53,12 +53,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ighormartins/progress-logger.git"
+    "url": "https://github.com/ighormartins/proglog.git"
   },
   "bugs": {
-    "url": "https://github.com/ighormartins/progress-logger/issues"
+    "url": "https://github.com/ighormartins/proglog/issues"
   },
-  "homepage": "https://github.com/ighormartins/progress-logger#readme",
+  "homepage": "https://github.com/ighormartins/proglog#readme",
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.0",
