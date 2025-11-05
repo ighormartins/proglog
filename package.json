@@ -53,7 +53,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ighormartins/proglog.git"
+    "url": "git+https://github.com/ighormartins/proglog.git"
   },
   "bugs": {
     "url": "https://github.com/ighormartins/proglog/issues"
