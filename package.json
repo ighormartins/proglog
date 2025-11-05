@@ -1,0 +1,76 @@
+{
+  "name": "progress-logger",
+  "version": "0.1.0",
+  "description": "A tiny Node.js library to track multiple long-running tasks and auto-render a live, aggregated progress table in the console",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "build": "npm run build:clean && npm run build:esm && npm run build:cjs && npm run build:types",
+    "build:clean": "rm -rf dist",
+    "build:esm": "tsc --project tsconfig.esm.json",
+    "build:cjs": "tsc --project tsconfig.cjs.json",
+    "build:types": "tsc --project tsconfig.types.json",
+    "dev": "tsc --project tsconfig.esm.json --watch",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
+    "validate": "npm run type-check && npm run lint && npm run format:check && npm test",
+    "prepublishOnly": "npm run validate && npm run build"
+  },
+  "keywords": [
+    "progress",
+    "progress-bar",
+    "console",
+    "terminal",
+    "cli",
+    "tracker",
+    "task",
+    "logging",
+    "spinner"
+  ],
+  "author": "Ighor Martins",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ighormartins/progress-logger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ighormartins/progress-logger/issues"
+  },
+  "homepage": "https://github.com/ighormartins/progress-logger#readme",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.3",
+    "@typescript-eslint/parser": "^8.46.3",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "jest": "^30.2.0",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.9.3"
+  },
+  "sideEffects": false
+}
