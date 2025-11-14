@@ -45,6 +45,7 @@ describe('calculator', () => {
         lastUpdatedAt: Date.now(),
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
       expect(calculateElapsed(state)).toBe(0);
     });
@@ -59,6 +60,7 @@ describe('calculator', () => {
         lastUpdatedAt: Date.now(),
         startCurrent: 0,
         pauseBuffer: 10000,
+        counters: new Map(),
       };
       expect(calculateElapsed(state)).toBe(10000);
     });
@@ -73,6 +75,7 @@ describe('calculator', () => {
         lastUpdatedAt: Date.now(),
         startCurrent: 0,
         pauseBuffer: 15000,
+        counters: new Map(),
       };
       expect(calculateElapsed(state)).toBe(15000);
     });
@@ -88,6 +91,7 @@ describe('calculator', () => {
         lastUpdatedAt: now,
         startCurrent: 0,
         pauseBuffer: 10000,
+        counters: new Map(),
       };
       const elapsed = calculateElapsed(state);
       expect(elapsed).toBeGreaterThanOrEqual(15000);
@@ -105,6 +109,7 @@ describe('calculator', () => {
         lastUpdatedAt: now,
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
       const elapsed = calculateElapsed(state);
       expect(elapsed).toBeGreaterThanOrEqual(5000);
@@ -123,6 +128,7 @@ describe('calculator', () => {
         lastUpdatedAt: Date.now(),
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
       expect(calculateRate(state)).toBeNull();
     });
@@ -138,6 +144,7 @@ describe('calculator', () => {
         lastUpdatedAt: now,
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
       expect(calculateRate(state)).toBeNull();
     });
@@ -153,6 +160,7 @@ describe('calculator', () => {
         lastUpdatedAt: now,
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
       expect(calculateRate(state)).toBe(60); // 60 items in 1 minute
     });
@@ -168,6 +176,7 @@ describe('calculator', () => {
         lastUpdatedAt: now,
         startCurrent: 0,
         pauseBuffer: 30000, // 30 seconds from previous session
+        counters: new Map(),
       };
       const rate = calculateRate(state);
       expect(rate).toBe(120); // 120 items in 1 minute total
@@ -183,6 +192,7 @@ describe('calculator', () => {
         lastUpdatedAt: Date.now(),
         startCurrent: 0,
         pauseBuffer: 60000, // 1 minute
+        counters: new Map(),
       };
       expect(calculateRate(state)).toBe(100); // 100 items per minute
     });
@@ -199,6 +209,7 @@ describe('calculator', () => {
         lastUpdatedAt: Date.now(),
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
       expect(calculateEta(state, 50)).toBeNull();
     });
@@ -213,6 +224,7 @@ describe('calculator', () => {
         lastUpdatedAt: Date.now(),
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
       expect(calculateEta(state, 50)).toBe(0);
     });
@@ -227,6 +239,7 @@ describe('calculator', () => {
         lastUpdatedAt: Date.now(),
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
       expect(calculateEta(state, null)).toBeNull();
     });
@@ -242,6 +255,7 @@ describe('calculator', () => {
         lastUpdatedAt: now,
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
       // Rate is 50/min, need 50 more, so ETA should be ~1 minute
       const eta = calculateEta(state, 50);
@@ -260,6 +274,7 @@ describe('calculator', () => {
         lastUpdatedAt: now,
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
       const eta = calculateEta(state, 1);
       expect(eta).toBeGreaterThan(0);
@@ -279,6 +294,7 @@ describe('calculator', () => {
         lastUpdatedAt: now,
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
 
       const metrics = calculateMetrics(state);
@@ -300,6 +316,7 @@ describe('calculator', () => {
         lastUpdatedAt: Date.now(),
         startCurrent: 0,
         pauseBuffer: 0,
+        counters: new Map(),
       };
 
       const metrics = calculateMetrics(state);
@@ -320,6 +337,7 @@ describe('calculator', () => {
         lastUpdatedAt: Date.now(),
         startCurrent: 0,
         pauseBuffer: 120000,
+        counters: new Map(),
       };
 
       const metrics = calculateMetrics(state);

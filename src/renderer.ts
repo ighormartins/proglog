@@ -11,6 +11,7 @@ import {
   formatElapsed,
   formatNumber,
   truncate,
+  formatCounters,
 } from './formatter';
 
 // Render the table
@@ -73,6 +74,12 @@ function buildOutput(trackers: Progress[]): string {
     const elapsed = formatElapsed(metrics.elapsed).padEnd(10);
 
     lines.push(`${taskName} ${currentTotal} ${percentage} ${bar} ${rate} ${eta} ${elapsed}`);
+
+    // Add counter sub-row if counters exist
+    if (state.counters.size > 0) {
+      const countersStr = formatCounters(state.counters);
+      lines.push(`  └─ ${countersStr}`);
+    }
   }
 
   return lines.join('\n');

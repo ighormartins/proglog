@@ -269,4 +269,140 @@ describe('renderer', () => {
       expect(output).toContain('finished');
     });
   });
+
+  describe('counter rendering', () => {
+    it('should not render counter sub-row when tracker has no counters', () => {
+      const task = registry.get('test-task');
+      task.setTotal(100);
+      task.setCurrent(50);
+
+      render();
+
+      const output = stdoutWrites.join('');
+      expect(output).not.toContain('└─');
+    });
+
+    it('should render counter sub-row when tracker has counters', () => {
+      const task = registry.get('test-task');
+      task.setTotal(100);
+      task.setCurrent(50);
+      task.count('errors', 3);
+
+      render();
+
+      const output = stdoutWrites.join('');
+      expect(output).toContain('└─');
+      expect(output).toContain('errors: 3');
+    });
+
+    it('should render multiple counters in alphabetical order', () => {
+      const task = registry.get('test-task');
+      task.setTotal(100);
+      task.count('warnings', 5);
+      task.count('errors', 3);
+      task.count('skipped', 12);
+
+      render();
+
+      const output = stdoutWrites.join('');
+      expect(output).toContain('└─');
+      expect(output).toContain('errors: 3, skipped: 12, warnings: 5');
+    });
+
+    it('should render counter sub-rows for multiple trackers independently', () => {
+      const task1 = registry.get('task-1');
+      const task2 = registry.get('task-2');
+
+      task1.setTotal(100).count('errors', 2);
+      task2.setTotal(200).count('warnings', 7).count('skipped', 3);
+
+      render();
+
+      const output = stdoutWrites.join('');
+
+      // Both trackers should have counter sub-rows
+      expect(output).toContain('errors: 2');
+      expect(output).toContain('skipped: 3, warnings: 7');
+
+      // Count the number of sub-row indicators
+      const subRowCount = (output.match(/└─/g) || []).length;
+      expect(subRowCount).toBe(2);
+    });
+
+    it('should handle tracker with counters but no total', () => {
+      const task = registry.get('no-total');
+      task.setCurrent(50);
+      task.count('processed', 50);
+
+      render();
+
+      const output = stdoutWrites.join('');
+      expect(output).toContain('no-total');
+      expect(output).toContain('└─');
+      expect(output).toContain('processed: 50');
+    });
+
+    it('should render counters with negative values', () => {
+      const task = registry.get('test');
+      task.setTotal(100);
+      task.count('delta', 10);
+      task.count('delta', -3);
+
+      render();
+
+      const output = stdoutWrites.join('');
+      expect(output).toContain('delta: 7');
+    });
+
+    it('should render counters with zero values', () => {
+      const task = registry.get('test');
+      task.setTotal(100);
+      task.count('retries', 0);
+
+      render();
+
+      const output = stdoutWrites.join('');
+      expect(output).toContain('retries: 0');
+    });
+
+    it('should update counter display when counter values change', () => {
+      const task = registry.get('test');
+      task.setTotal(100);
+      task.count('errors', 1);
+
+      render();
+      const output1 = stdoutWrites.join('');
+      expect(output1).toContain('errors: 1');
+
+      // Clear and update
+      stdoutWrites = [];
+      task.count('errors', 2);
+      render();
+
+      const output2 = stdoutWrites.join('');
+      expect(output2).toContain('errors: 3');
+    });
+
+    it('should render counter sub-row for paused tracker', () => {
+      const task = registry.get('test');
+      task.setTotal(100).setCurrent(50).count('errors', 5).pause();
+
+      render();
+
+      const output = stdoutWrites.join('');
+      expect(output).toContain('└─');
+      expect(output).toContain('errors: 5');
+    });
+
+    it('should render counter sub-row for finished tracker', () => {
+      const task = registry.get('test');
+      task.setTotal(100).setCurrent(100).count('total_errors', 3);
+
+      render();
+
+      const output = stdoutWrites.join('');
+      expect(output).toContain('└─');
+      expect(output).toContain('total_errors: 3');
+    });
+  });
 });

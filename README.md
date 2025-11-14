@@ -40,6 +40,7 @@ download             100/100          100%  [███████████�
 - 🔄 **Multiple tasks** - Track unlimited concurrent operations
 - ⏸️ **Pause/Resume** - Handle rate limits and resource constraints
 - 📈 **Smart metrics** - ETA, rate, elapsed time, and completion percentage
+- 🔢 **Counters** - Track errors, warnings, retries, or any custom metrics per task
 - 🎨 **TTY adaptive** - Beautiful ANSI output in terminals, clean logs in files
 - 🔗 **Chainable API** - All methods return `this`
 - 📦 **Zero dependencies** - Lightweight and fast
@@ -91,6 +92,7 @@ downloading-files    50/100           50%  [██████████░░
 - [Usage Examples](#usage-examples)
   - [Basic Usage](#basic-usage)
   - [Multiple Tasks](#multiple-tasks)
+  - [Tracking Counters](#tracking-counters)
   - [Pause and Resume](#pause-and-resume)
   - [Batch Processing](#batch-processing)
   - [Method Chaining](#method-chaining)
@@ -142,6 +144,46 @@ PLG('uploading-results').increment();
 
 // All tasks show in a single auto-updating table!
 ```
+
+### Tracking Counters
+
+Need to track errors, warnings, retries, or any other metrics alongside your progress? Use counters!
+
+```javascript
+import { PLG } from 'proglog';
+
+PLG('processing').setTotal(100);
+
+for (let i = 0; i < 100; i++) {
+  PLG('processing').increment();
+
+  try {
+    await processItem(i);
+  } catch (err) {
+    PLG('processing').count('errors');  // Increment error counter
+
+    if (shouldRetry(err)) {
+      PLG('processing').count('retries', 2);  // Add 2 to retries counter
+      await retry();
+    }
+  }
+
+  if (needsWarning(i)) {
+    PLG('processing').count('warnings');
+  }
+}
+```
+
+**Output:**
+
+```
+Task                 Current/Total    %    Progress              Rate      ETA       Elapsed
+────────────────────────────────────────────────────────────────────────────────────────────────────
+processing           75/100           75%  [███████████████░░░░░] 150/min   <1m       30s
+  └─ errors: 3, retries: 6, warnings: 12
+```
+
+Counters show up as a sub-row beneath each tracker, automatically sorted alphabetically. Perfect for keeping an eye on issues as they happen!
 
 ### Pause and Resume
 
@@ -262,6 +304,35 @@ ProgressLogger('task').increment();    // +1
 ProgressLogger('task').increment(5);   // +5
 ```
 
+#### `.count(name: string, value?: number): this`
+
+Tracks custom counters for errors, warnings, retries, or any other metrics you want to monitor.
+
+- **Without value:** Increments the counter by 1 (creates it with 1 if it doesn't exist)
+- **With value:** Increments the counter by the specified amount (creates it with that value if it doesn't exist)
+
+```javascript
+ProgressLogger('task').count('errors');        // errors = 1
+ProgressLogger('task').count('errors');        // errors = 2
+ProgressLogger('task').count('warnings', 5);   // warnings = 5
+ProgressLogger('task').count('warnings', 3);   // warnings = 8
+
+// Also works with negative numbers for decrements
+ProgressLogger('task').count('delta', -2);     // delta = -2
+```
+
+Counters automatically appear as a sub-row beneath the task in the progress table, sorted alphabetically.
+
+#### `.resetCounter(name: string): this`
+
+Resets a counter back to 0.
+
+```javascript
+ProgressLogger('task').resetCounter('errors'); // errors = 0
+```
+
+If the counter doesn't exist yet, it will be created with value 0.
+
 #### `.pause(): this`
 
 Pauses the tracker and saves elapsed time to buffer.
@@ -313,8 +384,10 @@ Returns a copy of the current state.
 
 ```javascript
 const state = ProgressLogger('task').getState();
-// { current, total, startedAt, lastUpdatedAt, status, pauseBuffer }
+// { current, total, startedAt, lastUpdatedAt, status, pauseBuffer, counters }
 ```
+
+The `counters` property is a `Map<string, number>` containing all counter values.
 
 ### Static Methods
 
@@ -425,6 +498,7 @@ See the [`examples/`](./examples) directory for runnable demos:
 - `basic.js` - Simple single-task tracking
 - `short-alias.js` - Using the PLG alias for less typing
 - `multiple-tasks.js` - Concurrent task tracking
+- `counter-example.js` - Tracking errors, warnings, and custom metrics
 - `pause-resume.js` - Handling pauses and resumes
 - `batch-processing.js` - Real-world batch workflow
 - `quiet-mode.js` - Silent execution mode
@@ -435,6 +509,7 @@ Run any example:
 ```bash
 npm run build
 node examples/basic.js
+node examples/counter-example.js
 ```
 
 ## FAQ
@@ -465,6 +540,24 @@ Yes! Just don't call `.setTotal()`. The task will show as "starting" with a curr
 
 ```javascript
 ProgressLogger('streaming-data').increment(); // Just counts items
+```
+
+### When should I use counters vs separate trackers?
+
+Use **counters** when you want to track metrics that are related to a main task (errors during processing, retries, warnings, etc.). They show up as a sub-row beneath the task.
+
+Use **separate trackers** when you have independent tasks that need their own progress bars (fetching, processing, uploading as separate operations).
+
+```javascript
+// Good use of counters - metrics related to one task
+PLG('processing').setTotal(100);
+PLG('processing').count('errors');
+PLG('processing').count('warnings');
+
+// Good use of separate trackers - independent operations
+PLG('fetching').setTotal(50);
+PLG('processing').setTotal(100);
+PLG('uploading').setTotal(75);
 ```
 
 ## Contributing

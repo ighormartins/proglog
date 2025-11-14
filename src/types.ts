@@ -27,6 +27,8 @@ export interface ProgressState {
   startCurrent: number;
   /** Accumulated time spent in running state (milliseconds) */
   pauseBuffer: number;
+  /** Per-tracker counters */
+  counters: Map<string, number>;
 }
 
 // Calculated metrics

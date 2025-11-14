@@ -410,4 +410,167 @@ describe('Progress', () => {
       expect(progress.getState().status).toBe('running');
     });
   });
+
+  describe('count', () => {
+    it('should create counter with value 1 when called without value', () => {
+      const progress = new Progress('test');
+      progress.count('errors');
+
+      const state = progress.getState();
+      expect(state.counters.get('errors')).toBe(1);
+    });
+
+    it('should increment existing counter by 1 when called without value', () => {
+      const progress = new Progress('test');
+      progress.count('errors');
+      progress.count('errors');
+      progress.count('errors');
+
+      const state = progress.getState();
+      expect(state.counters.get('errors')).toBe(3);
+    });
+
+    it('should create counter with initial value when called with value', () => {
+      const progress = new Progress('test');
+      progress.count('errors', 5);
+
+      const state = progress.getState();
+      expect(state.counters.get('errors')).toBe(5);
+    });
+
+    it('should increment existing counter by value when called with value', () => {
+      const progress = new Progress('test');
+      progress.count('errors', 3);
+      progress.count('errors', 5);
+
+      const state = progress.getState();
+      expect(state.counters.get('errors')).toBe(8);
+    });
+
+    it('should support multiple different counters', () => {
+      const progress = new Progress('test');
+      progress.count('errors');
+      progress.count('warnings', 2);
+      progress.count('skipped', 10);
+      progress.count('errors');
+
+      const state = progress.getState();
+      expect(state.counters.get('errors')).toBe(2);
+      expect(state.counters.get('warnings')).toBe(2);
+      expect(state.counters.get('skipped')).toBe(10);
+    });
+
+    it('should support negative values', () => {
+      const progress = new Progress('test');
+      progress.count('delta', 5);
+      progress.count('delta', -3);
+
+      const state = progress.getState();
+      expect(state.counters.get('delta')).toBe(2);
+    });
+
+    it('should support zero values', () => {
+      const progress = new Progress('test');
+      progress.count('retries', 0);
+
+      const state = progress.getState();
+      expect(state.counters.get('retries')).toBe(0);
+    });
+
+    it('should return this for chaining', () => {
+      const progress = new Progress('test');
+      const result = progress.count('errors');
+      expect(result).toBe(progress);
+    });
+
+    it('should support chaining with other methods', () => {
+      const progress = new Progress('test')
+        .setTotal(100)
+        .setCurrent(50)
+        .count('errors')
+        .count('warnings', 5)
+        .increment(10);
+
+      const state = progress.getState();
+      expect(state.current).toBe(60);
+      expect(state.counters.get('errors')).toBe(1);
+      expect(state.counters.get('warnings')).toBe(5);
+    });
+
+    it('should persist counters across pause/resume', () => {
+      const progress = new Progress('test');
+      progress.setTotal(100);
+      progress.count('errors', 3);
+      progress.pause();
+      progress.count('errors', 2);
+      progress.resume();
+
+      const state = progress.getState();
+      expect(state.counters.get('errors')).toBe(5);
+    });
+  });
+
+  describe('resetCounter', () => {
+    it('should reset existing counter to 0', () => {
+      const progress = new Progress('test');
+      progress.count('errors', 10);
+      progress.resetCounter('errors');
+
+      const state = progress.getState();
+      expect(state.counters.get('errors')).toBe(0);
+    });
+
+    it('should create counter with 0 if it does not exist', () => {
+      const progress = new Progress('test');
+      progress.resetCounter('errors');
+
+      const state = progress.getState();
+      expect(state.counters.get('errors')).toBe(0);
+    });
+
+    it('should return this for chaining', () => {
+      const progress = new Progress('test');
+      const result = progress.resetCounter('errors');
+      expect(result).toBe(progress);
+    });
+
+    it('should support chaining with count', () => {
+      const progress = new Progress('test')
+        .count('errors', 5)
+        .resetCounter('errors')
+        .count('errors');
+
+      const state = progress.getState();
+      expect(state.counters.get('errors')).toBe(1);
+    });
+  });
+
+  describe('constructor with counters', () => {
+    it('should initialize counters as empty Map', () => {
+      const progress = new Progress('test-task');
+      const state = progress.getState();
+
+      expect(state.counters).toBeInstanceOf(Map);
+      expect(state.counters.size).toBe(0);
+    });
+  });
+
+  describe('getState with counters', () => {
+    it('should return a copy of the counters map', () => {
+      const progress = new Progress('test');
+      progress.count('errors', 5);
+
+      const state1 = progress.getState();
+      const state2 = progress.getState();
+
+      expect(state1.counters).not.toBe(state2.counters); // Different Map instances
+      expect(state1.counters.get('errors')).toBe(5);
+      expect(state2.counters.get('errors')).toBe(5);
+
+      // Mutating one shouldn't affect the other
+      state1.counters.set('errors', 100);
+      expect(state2.counters.get('errors')).toBe(5);
+      expect(progress.getState().counters.get('errors')).toBe(5);
+    });
+  });
 });

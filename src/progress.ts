@@ -17,6 +17,7 @@ export class Progress {
       lastUpdatedAt: Date.now(),
       startCurrent: 0,
       pauseBuffer: 0,
+      counters: new Map(),
     };
   }
 
@@ -104,6 +105,28 @@ export class Progress {
   }
 
   /**
+   * Increment or set a counter
+   * - count(name) -> increment by 1 (create with 1 if doesn't exist)
+   * - count(name, value) -> increment by value (create with value if doesn't exist)
+   */
+  count(name: string, value?: number): this {
+    const increment = value ?? 1;
+    const current = this.state.counters.get(name) ?? 0;
+    this.state.counters.set(name, current + increment);
+    this.state.lastUpdatedAt = Date.now();
+    return this;
+  }
+
+  /**
+   * Reset a counter to 0
+   */
+  resetCounter(name: string): this {
+    this.state.counters.set(name, 0);
+    this.state.lastUpdatedAt = Date.now();
+    return this;
+  }
+
+  /**
    * Remove tracker manually
    */
   done(): this {
@@ -119,7 +142,10 @@ export class Progress {
    * Get current state
    */
   getState(): Readonly<ProgressState> {
-    return { ...this.state };
+    return {
+      ...this.state,
+      counters: new Map(this.state.counters)
+    };
   }
 
   /**

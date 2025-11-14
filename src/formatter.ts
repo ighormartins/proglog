@@ -68,3 +68,18 @@ export function truncate(text: string, maxLength: number): string {
   }
   return text.slice(0, maxLength - 1) + '…';
 }
+
+// Format counters map
+export function formatCounters(counters: Map<string, number>): string {
+  if (counters.size === 0) {
+    return '';
+  }
+
+  // Sort counter names alphabetically
+  const sortedEntries = Array.from(counters.entries()).sort((a, b) =>
+    a[0].localeCompare(b[0])
+  );
+
+  // Format as "name: value, name: value"
+  return sortedEntries.map(([name, value]) => `${name}: ${value}`).join(', ');
+}

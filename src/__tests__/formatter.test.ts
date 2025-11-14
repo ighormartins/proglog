@@ -9,6 +9,7 @@ import {
   formatElapsed,
   formatNumber,
   truncate,
+  formatCounters,
 } from '../formatter';
 
 describe('formatter', () => {
@@ -220,6 +221,64 @@ describe('formatter', () => {
       const result = truncate('this is a very long string', 15);
       expect(result.length).toBe(15);
       expect(result).toBe('this is a very…');
+    });
+  });
+
+  describe('formatCounters', () => {
+    it('should return empty string for empty map', () => {
+      const counters = new Map<string, number>();
+      expect(formatCounters(counters)).toBe('');
+    });
+
+    it('should format single counter', () => {
+      const counters = new Map<string, number>([['errors', 1]]);
+      expect(formatCounters(counters)).toBe('errors: 1');
+    });
+
+    it('should format multiple counters with alphabetical sorting', () => {
+      const counters = new Map<string, number>([
+        ['warnings', 5],
+        ['errors', 3],
+        ['skipped', 12],
+      ]);
+      expect(formatCounters(counters)).toBe('errors: 3, skipped: 12, warnings: 5');
+    });
+
+    it('should handle negative values', () => {
+      const counters = new Map<string, number>([['delta', -5]]);
+      expect(formatCounters(counters)).toBe('delta: -5');
+    });
+
+    it('should handle zero values', () => {
+      const counters = new Map<string, number>([['retries', 0]]);
+      expect(formatCounters(counters)).toBe('retries: 0');
+    });
+
+    it('should handle large numbers', () => {
+      const counters = new Map<string, number>([['processed', 1000000]]);
+      expect(formatCounters(counters)).toBe('processed: 1000000');
+    });
+
+    it('should maintain alphabetical order regardless of insertion order', () => {
+      const counters = new Map<string, number>([
+        ['zebra', 1],
+        ['alpha', 2],
+        ['middle', 3],
+      ]);
+      expect(formatCounters(counters)).toBe('alpha: 2, middle: 3, zebra: 1');
+    });
+
+    it('should format many counters correctly', () => {
+      const counters = new Map<string, number>([
+        ['errors', 3],
+        ['warnings', 5],
+        ['skipped', 12],
+        ['retries', 2],
+        ['successes', 100],
+      ]);
+      expect(formatCounters(counters)).toBe(
+        'errors: 3, retries: 2, skipped: 12, successes: 100, warnings: 5'
+      );
     });
   });
 });
