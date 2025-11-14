@@ -39,7 +39,7 @@ export function render(): void {
   if (isTTY) {
     // Clear and rewrite
     process.stdout.write('\x1b[2J\x1b[H'); // Clear screen and move cursor to top
-    process.stdout.write(output);
+    process.stdout.write(output + '\n');
   } else {
     // Append new snapshot
     process.stdout.write(`\n${output}\n`);
