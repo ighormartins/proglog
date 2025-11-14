@@ -2,10 +2,10 @@
  * ProgressLogger - Track multiple tasks with live progress table
  */
 
-import { Progress } from './progress';
-import { registry } from './registry';
-import { render } from './renderer';
-import { setQuiet } from './config';
+import { Progress } from './progress.js';
+import { registry } from './registry.js';
+import { render } from './renderer.js';
+import { setQuiet } from './config.js';
 
 // Default render interval (10 seconds)
 let renderIntervalMs = 10000;
@@ -96,8 +96,8 @@ function onTrackerDone(name: string): void {
 Progress.setFinishedCallback(onTrackerFinished);
 Progress.setDoneCallback(onTrackerDone);
 
-export type { ProgressLoggerConfig, ProgressStatus } from './types';
-export { Progress } from './progress';
+export type { ProgressLoggerConfig, ProgressStatus } from './types.js';
+export { Progress } from './progress.js';
 export default ProgressLogger;
 export { ProgressLogger as PLG };
 

@@ -1,6 +1,6 @@
 // Progress tracker with chainable API
 
-import type { ProgressState } from './types';
+import type { ProgressState } from './types.js';
 
 export class Progress {
   private state: ProgressState;

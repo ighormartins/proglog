@@ -1,6 +1,6 @@
 // Global registry for all trackers
 
-import { Progress } from './progress';
+import { Progress } from './progress.js';
 
 class ProgressRegistry {
   private trackers: Map<string, Progress> = new Map();

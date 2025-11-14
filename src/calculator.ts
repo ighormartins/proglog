@@ -1,6 +1,6 @@
 // Calculate progress metrics
 
-import type { ProgressState, ProgressMetrics } from './types';
+import type { ProgressState, ProgressMetrics } from './types.js';
 
 const EPSILON = 0.0001;
 

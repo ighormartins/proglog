@@ -21,11 +21,12 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "build": "npm run build:clean && npm run build:esm && npm run build:cjs && npm run build:types",
+    "build": "npm run build:clean && npm run build:esm && npm run build:cjs && npm run build:types && npm run build:package-json",
     "build:clean": "rm -rf dist",
     "build:esm": "tsc --project tsconfig.esm.json",
     "build:cjs": "tsc --project tsconfig.cjs.json",
     "build:types": "tsc --project tsconfig.types.json",
+    "build:package-json": "echo '{\"type\":\"module\"}' > dist/esm/package.json && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
     "dev": "tsc --project tsconfig.esm.json --watch",
     "type-check": "tsc --noEmit",
     "test": "jest",

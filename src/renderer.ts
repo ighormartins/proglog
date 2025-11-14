@@ -1,9 +1,9 @@
 // Render progress table
 
-import { Progress } from './progress';
-import { registry } from './registry';
-import { getConfig } from './config';
-import { calculateMetrics } from './calculator';
+import { Progress } from './progress.js';
+import { registry } from './registry.js';
+import { getConfig } from './config.js';
+import { calculateMetrics } from './calculator.js';
 import {
   formatProgressBar,
   formatEta,
@@ -12,7 +12,7 @@ import {
   formatNumber,
   truncate,
   formatCounters,
-} from './formatter';
+} from './formatter.js';
 
 // Render the table
 export function render(): void {
