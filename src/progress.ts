@@ -144,7 +144,7 @@ export class Progress {
   getState(): Readonly<ProgressState> {
     return {
       ...this.state,
-      counters: new Map(this.state.counters)
+      counters: new Map(this.state.counters),
     };
   }
 
