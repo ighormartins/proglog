@@ -42,7 +42,7 @@ export function render(): void {
     process.stdout.write(output);
   } else {
     // Append new snapshot
-    process.stdout.write(`\n${output}\n`);
+    process.stdout.write(`${output}\n`);
   }
 }
 
@@ -82,5 +82,5 @@ function buildOutput(trackers: Progress[]): string {
     }
   }
 
-  return lines.join('\n');
+  return '\n' + lines.join('\n');
 }
