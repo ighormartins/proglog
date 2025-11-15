@@ -1,6 +1,6 @@
 {
   "name": "proglog",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "description": "A tiny Node.js library to track multiple long-running tasks and auto-render a live, aggregated progress table in the console",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
